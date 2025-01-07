@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "B2dZKURSYnY=",
+  "success": true,
+  "projectFilePath": "E:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\deployf.botf\\0.17.3\\deployf.botf.0.17.3.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\telegram.bot\\18.0.0\\telegram.bot.18.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
