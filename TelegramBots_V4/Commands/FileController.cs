@@ -4,7 +4,9 @@ using Newtonsoft.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.InputFiles;
+using Telegram.Bot.Types.ReplyMarkups;
 using TelegramBots_V4;
+using TelegramBots_V4.Commands;
 using TelegramBots_V4.Json;
 
 namespace TelegramBots_V2
@@ -14,15 +16,24 @@ namespace TelegramBots_V2
     DeserializeMethod deserialize = JsonConvert.DeserializeObject<DeserializeMethod>(System.IO.File.ReadAllText(@"appsettings.json"))!;
 
     [Action("/start", "Start bot")]
-    public void Start()
+    public async void Start()
     {
       if (Context.Update.Message is not null)
       {
         var message = Context.Update.Message;
         //потому-что получаемый ответ когда я делая PushL мне не нравится 
-        Context.Bot.Client.SendTextMessageAsync(message.Chat.Id, "👋"); // этот метод для того что для анимации
+        await Context.Bot.Client.SendTextMessageAsync(message.Chat.Id, "👋"); // этот метод для того что для анимации
         PushL($"привет {message.Chat.FirstName ?? message.Chat.LastName ?? message.Chat.Username ?? "полные аноним"}");
       }
+      if (Context.Update.CallbackQuery is not null)
+      {
+        if (Context.Update.CallbackQuery.Message is not null)
+        {
+          await Context.Bot.Client.EditMessageReplyMarkupAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+        }
+      }
+      if (Context.Update.Message is not null)
+        await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "все команды", replyMarkup: FormInlineCommands.AllCommands());
     }
 
     [Action("/file", "Get file by name")]
@@ -45,9 +56,17 @@ namespace TelegramBots_V2
       }
     }
     [Action("/file", "Get file by name")]
-    public void InfoCorrect()
+    public async void InfoGetFile()
     {
-      PushL("вы ввели не правильно пример:\n/file файл.расширение");
+      if (Context.Update.CallbackQuery is not null)
+      {
+        if (Context.Update.CallbackQuery.Message is not null)
+        {
+          await Context.Bot.Client.EditMessageReplyMarkupAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId, FormInlineCommands.Menu());
+          await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "введите имя файла с расширение пример: /file файл.расширение");
+        }
+      }
     }
 
     [On(Handle.Unknown)]
@@ -69,20 +88,47 @@ namespace TelegramBots_V2
     public async void AllFile()
     {
       string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, isCreateOnlyFolder: true);
-      List<string> files = Directory.GetFiles(filePath).Select(fn => System.IO.Path.GetFileName(fn)).ToList();
 
-      string? filesNames = null;
-      int i = 1;
-      foreach (var item in files)
+      if (Context.Update.CallbackQuery is not null)
       {
-        filesNames += $"{i} - {item}";
-        filesNames += "\n";
-        i++;
+        if (Context.Update.CallbackQuery.Message is not null)
+        {
+          await Context.Bot.Client.EditMessageReplyMarkupAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId, FormInlineCommands.Menu());
+          await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
+          string fileInlinePath = await Context.Update.HashNames(deserialize.FileStoragePath!, isCreateOnlyFolder: true);
+
+          string? fileName = null;
+
+          DirectoryInfo info = new DirectoryInfo(fileInlinePath);
+          foreach (FileInfo file in info.GetFiles())
+          {
+            fileName += file.Name;
+            fileName += "\n";
+          }
+
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, fileName!);
+        }
       }
-
-      if (filesNames is not null)
+      else
       {
-        PushL(filesNames);
+        List<string> files = Directory.GetFiles(filePath).Select(fn => System.IO.Path.GetFileName(fn)).ToList();
+
+        string? filesNames = null;
+
+        foreach (var item in files)
+        {
+          filesNames += item;
+          filesNames += "\n";
+        }
+
+        if (filesNames is not null)
+        {
+          PushL(filesNames);
+        }
+        else
+        {
+          PushL("файлов нету");
+        }
       }
     }
   }

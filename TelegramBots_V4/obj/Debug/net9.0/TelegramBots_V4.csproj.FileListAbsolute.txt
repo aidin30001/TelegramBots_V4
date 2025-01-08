@@ -30,3 +30,4 @@ e:\Admin\Desktop\спантанные\TelegramBots_V4\TelegramBots_V4\bin\Debug\
 e:\Admin\Desktop\спантанные\TelegramBots_V4\TelegramBots_V4\bin\Debug\net9.0\Telegram.Bot.dll
 e:\Admin\Desktop\спантанные\TelegramBots_V4\TelegramBots_V4\obj\Debug\net9.0\TelegramBots_V4.csproj.AssemblyReference.cache
 e:\Admin\Desktop\спантанные\TelegramBots_V4\TelegramBots_V4\obj\Debug\net9.0\Telegram.2CE73A5D.Up2Date
+e:\Admin\Desktop\спантанные\TelegramBots_V4\TelegramBots_V4\obj\Debug\net9.0\TelegramBots_V4.sourcelink.json
