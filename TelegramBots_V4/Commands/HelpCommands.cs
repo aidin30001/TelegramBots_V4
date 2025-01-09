@@ -1,12 +1,12 @@
 using Deployf.Botf;
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 
 namespace TelegramBots_V4.Commands
 {
   public class HelpCommands : BotController
   {
     [Action("/h", "Information about commands")]
-    [Action("/help", "Information about commands")]
     public async void InfoCommands()
     {
       string result = "null";

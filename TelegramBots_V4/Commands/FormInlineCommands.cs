@@ -16,6 +16,10 @@ namespace TelegramBots_V4.Commands
       {
         new InlineKeyboardButton[]
         {
+          InlineKeyboardButton.WithCallbackData("загрузит файл", "/download"),
+        },
+        new InlineKeyboardButton[]
+        {
           InlineKeyboardButton.WithCallbackData("поиск файла", "/file"),
         },
         new InlineKeyboardButton[]
@@ -25,6 +29,14 @@ namespace TelegramBots_V4.Commands
         new InlineKeyboardButton[]
         {
           InlineKeyboardButton.WithCallbackData("помощь", "/h"),
+        },
+        new InlineKeyboardButton[]
+        {
+          InlineKeyboardButton.WithCallbackData("удалить файл", "/deletefile"),
+        },
+        new InlineKeyboardButton[]
+        {
+          InlineKeyboardButton.WithCallbackData("переименовывать файл", "/rename"),
         },
       });
     }
