@@ -2,10 +2,10 @@
   "version": 3,
   "targets": {
     "net9.0": {
-      "Deployf.Botf/0.17.3": {
+      "Deployf.Botf/0.18.0": {
         "type": "package",
         "dependencies": {
-          "Telegram.Bot": "18.0.0"
+          "Telegram.Bot": "19.0.0"
         },
         "compile": {
           "lib/net6.0/Deployf.Botf.dll": {}
@@ -27,18 +27,18 @@
           }
         }
       },
-      "Telegram.Bot/18.0.0": {
+      "Telegram.Bot/19.0.0": {
         "type": "package",
         "dependencies": {
-          "Newtonsoft.Json": "12.0.2"
+          "Newtonsoft.Json": "13.0.1"
         },
         "compile": {
-          "lib/netcoreapp3.1/Telegram.Bot.dll": {
+          "lib/net6.0/Telegram.Bot.dll": {
             "related": ".pdb;.xml"
           }
         },
         "runtime": {
-          "lib/netcoreapp3.1/Telegram.Bot.dll": {
+          "lib/net6.0/Telegram.Bot.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -46,15 +46,15 @@
     }
   },
   "libraries": {
-    "Deployf.Botf/0.17.3": {
-      "sha512": "HOS6Yr5sR5NUncOm2nlvhKZA5MGVCD0RTl0M/LELxvUfFbKBrBjE9xUi5yzJdd6iuiWCHQ2wN40TFvcPR4jFjQ==",
+    "Deployf.Botf/0.18.0": {
+      "sha512": "0sDvQ9BGiDa6Bcmk60jdc0yHeaPmzalsd9/v6YQWlI+DZW4GOvVdf5F51DReQfE30wC+ElsC8WUNsrwjK4xa8w==",
       "type": "package",
-      "path": "deployf.botf/0.17.3",
+      "path": "deployf.botf/0.18.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "deployf.botf.0.17.3.nupkg.sha512",
+        "deployf.botf.0.18.0.nupkg.sha512",
         "deployf.botf.nuspec",
         "deployf_logo_sq_128.png",
         "lib/net6.0/Deployf.Botf.dll"
@@ -90,28 +90,28 @@
         "packageIcon.png"
       ]
     },
-    "Telegram.Bot/18.0.0": {
-      "sha512": "BD0UchUXINymCGS+1O1tv2enCRyv+VbSJQAgfnueTZs3j7K4XXyJyW0CgyJleTrqB1oq1hS1ux6gBpi3Ajp+ZQ==",
+    "Telegram.Bot/19.0.0": {
+      "sha512": "Q16IOitgjGoaJOuqgKQy0FeF+hr/ncmlX2esrhCC7aiyhSX7roYEriWaGAHkQZR8QzbImjFfl4eQh2IxcnOrPg==",
       "type": "package",
-      "path": "telegram.bot/18.0.0",
+      "path": "telegram.bot/19.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "lib/netcoreapp3.1/Telegram.Bot.dll",
-        "lib/netcoreapp3.1/Telegram.Bot.pdb",
-        "lib/netcoreapp3.1/Telegram.Bot.xml",
+        "lib/net6.0/Telegram.Bot.dll",
+        "lib/net6.0/Telegram.Bot.pdb",
+        "lib/net6.0/Telegram.Bot.xml",
         "lib/netstandard2.0/Telegram.Bot.dll",
         "lib/netstandard2.0/Telegram.Bot.pdb",
         "lib/netstandard2.0/Telegram.Bot.xml",
         "package-icon.png",
-        "telegram.bot.18.0.0.nupkg.sha512",
+        "telegram.bot.19.0.0.nupkg.sha512",
         "telegram.bot.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "Deployf.Botf >= 0.17.3",
+      "Deployf.Botf >= 0.18.0",
       "Newtonsoft.Json >= 13.0.3"
     ]
   },
@@ -122,11 +122,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "e:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
+      "projectUniqueName": "E:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
       "projectName": "TelegramBots_V4",
-      "projectPath": "e:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
+      "projectPath": "E:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "e:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\obj\\",
+      "outputPath": "E:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -168,7 +168,7 @@
         "dependencies": {
           "Deployf.Botf": {
             "target": "Package",
-            "version": "[0.17.3, )"
+            "version": "[0.18.0, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",

@@ -1,3 +1,31 @@
 {
-	"dotnet.defaultSolution": "TelegramBots_V4.sln"
+	"dotnet.defaultSolution": "TelegramBots_V4.sln",
+	"cSpell.words": [
+		"Async",
+		"Authentication",
+		"await",
+		"Botf",
+		"Callback",
+		"Chat",
+		"Client",
+		"Context",
+		"Core",
+		"Deployf",
+		"Edit",
+		"First",
+		"Json",
+		"Markup",
+		"message",
+		"Microsoft",
+		"Name",
+		"null",
+		"Push",
+		"Send",
+		"System",
+		"Telegram",
+		"Text",
+		"Types",
+		"Update",
+		"using"
+	]
 }

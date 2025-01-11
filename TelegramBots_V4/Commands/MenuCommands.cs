@@ -18,12 +18,12 @@ namespace TelegramBots_V4.Commands
         {
           await Context.Bot.Client.EditMessageReplyMarkupAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
           await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
-          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "меню команды", replyMarkup: FormInlineCommands.AllCommands());
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "все команды", replyMarkup: FormInlineCommands.AllCommands());
         }
       }
       else
       {
-        await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message?.Chat.Id!, "меню команды", replyMarkup: FormInlineCommands.AllCommands());
+        await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message?.Chat.Id!, "все команды", replyMarkup: FormInlineCommands.AllCommands());
       }
     }
   }

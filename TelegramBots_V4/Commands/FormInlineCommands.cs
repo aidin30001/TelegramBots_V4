@@ -24,10 +24,6 @@ namespace TelegramBots_V4.Commands
         },
         new InlineKeyboardButton[]
         {
-          InlineKeyboardButton.WithCallbackData("все файлы", "/allfile"),
-        },
-        new InlineKeyboardButton[]
-        {
           InlineKeyboardButton.WithCallbackData("помощь", "/h"),
         },
         new InlineKeyboardButton[]
@@ -43,13 +39,38 @@ namespace TelegramBots_V4.Commands
 
     public static InlineKeyboardMarkup Menu()
     {
-      return new InlineKeyboardMarkup( new List<InlineKeyboardButton[]>()
+      return new InlineKeyboardMarkup(new List<InlineKeyboardButton[]>()
       {
-        new InlineKeyboardButton[] 
+        new InlineKeyboardButton[]
         {
           InlineKeyboardButton.WithCallbackData("меню", "/menu")
         }
       });
+    }
+
+    public static InlineKeyboardMarkup GenerateInlineButtons(this List<string> items, bool del = false)
+    {
+      int i = 0;
+      if (items == null || items.Count == 0)
+      {
+        return null!;
+      }
+
+      var buttons = new List<InlineKeyboardButton[]>();
+
+      foreach (var item in items)
+      {
+        buttons.Add(new[]
+        {
+          InlineKeyboardButton.WithCallbackData(item, $"fileIndex={i++}_delete={del}_")
+        });
+      }
+      buttons.Add(new[] 
+      {
+        InlineKeyboardButton.WithCallbackData("меню", "/menu")
+      }); 
+
+      return new InlineKeyboardMarkup(buttons);
     }
   }
 }
