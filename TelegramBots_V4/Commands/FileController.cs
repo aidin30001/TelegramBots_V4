@@ -14,53 +14,34 @@ namespace TelegramBots_V2
 {
   public class FilesController : BotController
   {
+    private string docFilePath = @"\Downloads\Documents";
+    private string descFile = "fileIndex";
     DeserializeMethod deserialize = JsonConvert.DeserializeObject<DeserializeMethod>(System.IO.File.ReadAllText(@"appsettings.json"))!;
 
-    [Action(null)]
-    [Action("/start", "Start bot")]
-    public async void Start()
-    {
-      if (Context.Update.Message is not null)
-      {
-        var message = Context.Update.Message;
-        //потому-что получаемый ответ когда я делая PushL мне не нравится 
-        await Context.Bot.Client.SendTextMessageAsync(message.Chat.Id, "👋"); // этот метод для того что для анимации
-        PushL($"привет {message.Chat.FirstName ?? message.Chat.LastName ?? message.Chat.Username ?? "полные аноним"}");
-      }
-      if (Context.Update.CallbackQuery is not null)
-      {
-        if (Context.Update.CallbackQuery.Message is not null)
-        {
-          await Context.Bot.Client.EditMessageReplyMarkupAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
-        }
-      }
-      if (Context.Update.Message is not null)
-        await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "все команды", replyMarkup: FormInlineCommands.AllCommands());
-    }
-
-    [Action("/file", "Get file by name")]
+    [Action("/file", "Получить файл по имени")]
     public void GetFile(string fileName)
     {
       GetFileFunction(fileName);
     }
-    [Action("/file", "Get file by name")]
+    [Action("/file", "Получить файл по имени")]
     public async void GetFile()
     {
-      string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, isCreateOnlyFolder: true);
+      string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, docFilePath, isCreateOnlyFolder: true);
       List<string> files = Directory.GetFiles(filePath).Select(fn => System.IO.Path.GetFileName(fn)).ToList();
       if (Context.Update.CallbackQuery is not null)
       {
         if (Context.Update.CallbackQuery.Message is not null)
         {
-          if (files.GenerateInlineButtons != null)
+          if (files.Count() != 0)
           {
-            await Context.Bot.Client.EditMessageReplyMarkupAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+            await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
             await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id!, "список", replyMarkup: files.GenerateInlineButtons());
+            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id!, "список", replyMarkup: files.GenerateInlineButtons(descFile));
           }
           else
           {
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "нету файлов");
+            await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "нету файлов", replyMarkup: FormInlineCommands.Menu());
           }
         }
       }
@@ -70,9 +51,9 @@ namespace TelegramBots_V2
         {
           if (Context.Update.Message.Chat is not null)
           {
-            if (files.GenerateInlineButtons != null)
+            if (files.Count() != 0)
             {
-              await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id!, "список", replyMarkup: files.GenerateInlineButtons());
+              await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id!, "список", replyMarkup: files.GenerateInlineButtons(descFile));
             }
             else
             {
@@ -83,7 +64,7 @@ namespace TelegramBots_V2
       }
     }
 
-    [Action("/download", "download info")]
+    [Action("/download", "информацию по скачивании")]
     public async void InfoDownload()
     {
       if (Context.Update.CallbackQuery is not null)
@@ -109,7 +90,7 @@ namespace TelegramBots_V2
       {
         var document = Context.Update.Message.Document;
         var file = await Context.Bot.Client.GetFileAsync(document.FileId);
-        string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, document.FileName, isCreateFolder: true);
+        string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, docFilePath,document.FileName, isCreateFolder: true);
 
         await using FileStream fs = new FileStream(filePath, FileMode.Create);
         {
@@ -122,37 +103,60 @@ namespace TelegramBots_V2
       }
     }
 
-    [Action("/df", "delete file by name")]
-    [Action("/deletefile", "delete file by name")]
+    [Action("/df", "удалить файл по имени")]
+    [Action("/deletefile", "удалить файл по имени")]
     public void DeleteFile(string fileName)
     {
       FileDelFunction(Context.Update, fileName);
     }
-    [Action("/df", "delete file by name")]
-    [Action("/deletefile", "delete file by name")]
+    [Action("/df", "удалить файл по имени")]
+    [Action("/deletefile", "удалить файл по имени")]
     public async void DeleteFile()
     {
-      string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, isCreateOnlyFolder: true);
+      string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, docFilePath, isCreateOnlyFolder: true);
       List<string> files = Directory.GetFiles(filePath).Select(fn => System.IO.Path.GetFileName(fn)).ToList();
 
-      if (Context.Update.CallbackQuery is not null)
+      if (files.Count() != 0)
       {
-        if (Context.Update.CallbackQuery.Message is not null)
+        if (Context.Update.CallbackQuery is not null)
         {
-          await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
-          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "список", replyMarkup: files.GenerateInlineButtons(del: true));
+          if (Context.Update.CallbackQuery.Message is not null)
+          {
+            await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+            await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
+            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "список", replyMarkup: files.GenerateInlineButtons(descFile, del: true));
+          }
+        }
+        else if (Context.Update.Message is not null)
+        {
+          if (Context.Update.Message.Chat is not null)
+          {
+            await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "список", replyMarkup: files.GenerateInlineButtons(descFile, del: true));
+          }
         }
       }
-      else if (Context.Update.Message is not null)
+      else 
       {
-        if (Context.Update.Message.Chat is not null)
+        if (Context.Update.CallbackQuery is not null)
         {
-          await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "список", replyMarkup: files.GenerateInlineButtons(del: true));
+          if (Context.Update.CallbackQuery.Message is not null)
+          {
+            await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+            await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
+            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "файлов нету", replyMarkup: FormInlineCommands.Menu());
+          }
+        }
+        else if (Context.Update.Message is not null)
+        {
+          if (Context.Update.Message.Chat is not null)
+          {
+            await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "файлов нету");
+          }
         }
       }
     }
 
-    [Action("/rename", "rename file")]
+    [Action("/rename", "переименовать файл")]
     public async void RenameFile(string oldname, string newname)
     {
       string oldFilePath = await Context.Update.HashNames(deserialize.FileStoragePath!, oldname);
@@ -168,7 +172,7 @@ namespace TelegramBots_V2
         PushL("файл не найден!");
       }
     }
-    [Action("/rename", "rename file")]
+    [Action("/rename", "переименовать файл")]
     public async void InfoRenameFile()
     {
       if (Context.Update.CallbackQuery is not null)
@@ -182,12 +186,6 @@ namespace TelegramBots_V2
       {
         PushL("введите команду имя файла с расширение пример: \n/rename старый_файл.расширение новый_файл.расширение\nвводит через пробел");
       }
-    }
-
-    [Action("/", "testing")]
-    public void Test(string test)
-    {
-      PushL($"test {test}");
     }
 
     [Action("fileIndex=0_delete=False_")]
@@ -399,9 +397,9 @@ namespace TelegramBots_V2
       {
         if (Context.Update.CallbackQuery.Message is not null)
         {
-          await Context.Bot.Client.EditMessageReplyMarkupAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
           await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
-          string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, isCreateOnlyFolder: true);
+          string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, docFilePath, isCreateOnlyFolder: true);
           List<string> files = Directory.GetFiles(filePath).Select(fn => System.IO.Path.GetFileName(fn)).ToList();
 
           string? pattern = Context.Update.CallbackQuery.Data;
@@ -437,7 +435,7 @@ namespace TelegramBots_V2
 
     private async void FileDelFunction(Update update, string fileName)
     {
-      string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, fileName);
+      string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!,docFilePath, fileName);
       if (filePath is not null)
       {
         if (System.IO.File.Exists(filePath))
@@ -466,7 +464,7 @@ namespace TelegramBots_V2
     }
     private async void GetFileFunction(string fileName)
     {
-      string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, fileName);
+      string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, docFilePath, fileName);
       if (filePath is not null)
       {
         if (System.IO.File.Exists(filePath))

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Deployf.Botf;
 using Telegram.Bot;
@@ -34,6 +35,14 @@ namespace TelegramBots_V4.Commands
         {
           InlineKeyboardButton.WithCallbackData("переименовывать файл", "/rename"),
         },
+        new InlineKeyboardButton[]
+        {
+          InlineKeyboardButton.WithCallbackData("удаление пользователя", "/deluser"),
+        },
+        // new InlineKeyboardButton[]
+        // {
+        //   InlineKeyboardButton.WithCallbackData("переименовывать файл", "/rename"),
+        // },
       });
     }
 
@@ -48,7 +57,7 @@ namespace TelegramBots_V4.Commands
       });
     }
 
-    public static InlineKeyboardMarkup GenerateInlineButtons(this List<string> items, bool del = false)
+    public static InlineKeyboardMarkup GenerateInlineButtons(this List<string> items, string desc, bool del = false, bool isRegex = false)
     {
       int i = 0;
       if (items == null || items.Count == 0)
@@ -58,12 +67,26 @@ namespace TelegramBots_V4.Commands
 
       var buttons = new List<InlineKeyboardButton[]>();
 
-      foreach (var item in items)
+      if (!isRegex)
       {
-        buttons.Add(new[]
+        foreach (var item in items)
         {
-          InlineKeyboardButton.WithCallbackData(item, $"fileIndex={i++}_delete={del}_")
-        });
+          buttons.Add(new[]
+          {
+            InlineKeyboardButton.WithCallbackData(item, $"{desc}={i++}_delete={del}_")
+          });
+        }
+      }
+      else 
+      {
+        foreach (var item in items)
+        {
+          Match match = Regex.Match(item, "id=<(.*?)>name=<(.*?)>");
+          buttons.Add(new[]
+          {
+            InlineKeyboardButton.WithCallbackData(Convert.ToString(match.Groups[2])!, $"{desc}={i++}_delete={del}_")
+          });
+        }
       }
       buttons.Add(new[] 
       {

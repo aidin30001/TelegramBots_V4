@@ -10,7 +10,7 @@ namespace TelegramBots_V4
 {
   public static class UniqueHashPath
   {
-    public static async Task<string> HashNames(this Update update, string fileStoragePath, string? fileName = null,  bool isCreateFolder = false, bool isCreateOnlyFolder = false)
+    public static async Task<string> HashNames(this Update update, string fileStoragePath, string fileSystem, string? fileName = null,  bool isCreateFolder = false, bool isCreateOnlyFolder = false)
     {
       string? result = null;
       string? key = null;
@@ -33,13 +33,13 @@ namespace TelegramBots_V4
         }
       }
 
-      result = HashPath(key: key!, fileStoragePath: fileStoragePath, fileName: fileName, isCreateFolder: isCreateFolder, isCreateOnlyFolder: isCreateOnlyFolder);
+      result = HashPath(key: key!, fileStoragePath: fileStoragePath, fileName: fileName, isCreateFolder: isCreateFolder, isCreateOnlyFolder: isCreateOnlyFolder, fileSystem: fileSystem);
       await Task.CompletedTask;
 
       return result!;
     }
 
-    private static string HashPath(string fileStoragePath, string key, string? fileName, bool isCreateFolder, bool isCreateOnlyFolder)
+    private static string HashPath(string fileStoragePath, string key, string? fileName, bool isCreateFolder, bool isCreateOnlyFolder, string fileSystem)
     {
       string hashPathStr;
       string? path = null;
@@ -53,7 +53,11 @@ namespace TelegramBots_V4
 
       string _fileName = $@"\{fileName}";
 
-
+      if (fileSystem is not null)
+      {
+        fileStoragePath += fileSystem;
+      }
+      
       if (isCreateFolder || isCreateOnlyFolder)
       {
         path = Path.Combine(fileStoragePath, hashPathStr);

@@ -6,7 +6,7 @@ namespace TelegramBots_V4.Commands
 {
   public class HelpCommands : BotController
   {
-    [Action("/h", "Information about commands")]
+    [Action("/h", "Информация о командах")]
     public async void InfoCommands()
     {
       string result = "null";
