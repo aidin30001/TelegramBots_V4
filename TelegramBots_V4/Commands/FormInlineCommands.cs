@@ -37,12 +37,8 @@ namespace TelegramBots_V4.Commands
         },
         new InlineKeyboardButton[]
         {
-          InlineKeyboardButton.WithCallbackData("удаление пользователя", "/deluser"),
+          InlineKeyboardButton.WithCallbackData("игры", "/games"),
         },
-        // new InlineKeyboardButton[]
-        // {
-        //   InlineKeyboardButton.WithCallbackData("переименовывать файл", "/rename"),
-        // },
       });
     }
 
@@ -56,6 +52,51 @@ namespace TelegramBots_V4.Commands
         }
       });
     }
+#region create replykeyboard
+    // public static ReplyKeyboardMarkup MenuGames()
+    // {
+    //   return new ReplyKeyboardMarkup(new List<KeyboardButton[]>()
+    //   {
+    //     new KeyboardButton[]
+    //     {
+    //       new KeyboardButton("Привет!"),
+    //       new KeyboardButton("Пока!"),
+    //     },
+    //     new KeyboardButton[]
+    //     {
+    //       new KeyboardButton("Позвони мне!")
+    //     },
+    //     new KeyboardButton[]
+    //     {
+    //       new KeyboardButton("Напиши моему соседу!")
+    //     }
+    //     })
+    //     {
+    //       // автоматическое изменение размера клавиатуры, если не стоит true,
+    //       // тогда клавиатура растягивается чуть ли не до луны,
+    //       // проверить можете сами
+    //       ResizeKeyboard = true,
+    //     };
+    // }
+#endregion
+
+    // public static ReplyKeyboardMarkup Games()
+    // {
+    //   return new ReplyKeyboardMarkup(new List<KeyboardButton[]>()
+    //   {
+    //     new KeyboardButton[]
+    //     {
+    //       new KeyboardButton("Карты")
+    //     },
+    //     new KeyboardButton[]
+    //     {
+    //       new KeyboardButton("Пинг-понг")
+    //     },
+    //   })
+    //   {
+    //     ResizeKeyboard = true,
+    //   };
+    // }
 
     public static InlineKeyboardMarkup GenerateInlineButtons(this List<string> items, string desc, bool del = false, bool isRegex = false)
     {
@@ -77,7 +118,7 @@ namespace TelegramBots_V4.Commands
           });
         }
       }
-      else 
+      else
       {
         foreach (var item in items)
         {
@@ -88,10 +129,10 @@ namespace TelegramBots_V4.Commands
           });
         }
       }
-      buttons.Add(new[] 
+      buttons.Add(new[]
       {
         InlineKeyboardButton.WithCallbackData("меню", "/menu")
-      }); 
+      });
 
       return new InlineKeyboardMarkup(buttons);
     }

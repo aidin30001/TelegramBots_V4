@@ -122,11 +122,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "e:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
+      "projectUniqueName": "E:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
       "projectName": "TelegramBots_V4",
-      "projectPath": "e:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
+      "projectPath": "E:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\TelegramBots_V4.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "e:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\obj\\",
+      "outputPath": "E:\\Admin\\Desktop\\спантанные\\TelegramBots_V4\\TelegramBots_V4\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -197,13 +197,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
-    }
-  ]
+  }
 }

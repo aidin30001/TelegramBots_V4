@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TelegramBots_V4.Commands.Games.Users.Connection.Json
+namespace TelegramBots_V4.Json
 {
   public class UserJsonDeserlalize
   {

@@ -16,27 +16,28 @@ namespace TelegramBots_V4.Commands.User
     [Action("/adduser")]
     public async Task AddUser(long userId, string name)
     {
-      if (Context.Update.Message is not null)
+      if (Context.Update.Message is not null && Context.Update.Message.Chat is not null)
       {
-        if (Context.Update.Message.Chat is not null)
-        {
-          string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, docFilePath, "data.txt", isCreateFolder: true);
+        Games.Users.Connection.User _user = new Games.Users.Connection.User();
+        _user.UserId = Convert.ToString(userId);
+        _user.UserName = name;
+        _user.UserConnection();
+        string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, docFilePath, "data.txt", isCreateFolder: true);
 
-          if (!System.IO.File.Exists(filePath))
+        if (!System.IO.File.Exists(filePath))
+        {
+          using (FileStream fs = new FileStream(filePath, FileMode.CreateNew))
+            fs.Dispose();
+        }
+        using (FileStream fs = new FileStream(filePath, FileMode.Append))
+        {
+          using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
           {
-            using (FileStream fs = new FileStream(filePath, FileMode.CreateNew))
-              fs.Dispose();
+            await sw.WriteLineAsync($"id=<{Convert.ToString(userId)}>name=<{name}>");
+            await sw.DisposeAsync();
+            await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "Успешно 👍");
           }
-          using (FileStream fs = new FileStream(filePath, FileMode.Append))
-          {
-            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
-            {
-              await sw.WriteLineAsync($"id=<{Convert.ToString(userId)}>name=<{name}>");
-              await sw.DisposeAsync();
-              await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "Успешно 👍");
-            }
-            await fs.DisposeAsync();
-          }
+          await fs.DisposeAsync();
         }
       }
     }
@@ -49,21 +50,15 @@ namespace TelegramBots_V4.Commands.User
       string? allUserId = null;
       if (!System.IO.File.Exists(filePath))
       {
-        if (Context.Update.Message is not null)
+        if (Context.Update.Message is not null && Context.Update.Message.Chat is not null)
         {
-          if (Context.Update.Message.Chat is not null)
-          {
-            await Context.Bot.Client.DeleteMessageAsync(Context.Update.Message.Chat.Id, Context.Update.Message.MessageId - 1);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "нету пользователя", replyMarkup: userId.GenerateInlineButtons(descUserId));
-          }
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.Message.Chat.Id, Context.Update.Message.MessageId - 1);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "нету пользователя", replyMarkup: userId.GenerateInlineButtons(descUserId));
         }
-        else if (Context.Update.CallbackQuery is not null)
+        else if (Context.Update.CallbackQuery is not null && Context.Update.CallbackQuery.Message is not null)
         {
-          if (Context.Update.CallbackQuery.Message is not null)
-          {
-            await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "нету пользователя", replyMarkup: userId.GenerateInlineButtons(descUserId));
-          }
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "нету пользователя", replyMarkup: userId.GenerateInlineButtons(descUserId));
         }
         return;
       }
@@ -79,21 +74,15 @@ namespace TelegramBots_V4.Commands.User
       if (allUserId != null)
       {
         userId = allUserId.Split("\n").ToList();
-        if (Context.Update.Message is not null)
+        if (Context.Update.Message is not null && Context.Update.Message.Chat is not null)
         {
-          if (Context.Update.Message.Chat is not null)
-          {
-            await Context.Bot.Client.DeleteMessageAsync(Context.Update.Message.Chat.Id, Context.Update.Message.MessageId - 1);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "список", replyMarkup: userId.GenerateInlineButtons(descUserId, isRegex: true));
-          }
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.Message.Chat.Id, Context.Update.Message.MessageId - 1);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "список", replyMarkup: userId.GenerateInlineButtons(descUserId, isRegex: true));
         }
-        else if (Context.Update.CallbackQuery is not null)
+        else if (Context.Update.CallbackQuery is not null && Context.Update.CallbackQuery.Message is not null)
         {
-          if (Context.Update.CallbackQuery.Message is not null)
-          {
-            await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "список", replyMarkup: userId.GenerateInlineButtons(descUserId, isRegex: true));
-          }
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "список", replyMarkup: userId.GenerateInlineButtons(descUserId, isRegex: true));
         }
       }
     }
@@ -106,21 +95,15 @@ namespace TelegramBots_V4.Commands.User
       string? allUserId = null;
       if (!System.IO.File.Exists(filePath))
       {
-        if (Context.Update.Message is not null)
+        if (Context.Update.Message is not null && Context.Update.Message.Chat is not null)
         {
-          if (Context.Update.Message.Chat is not null)
-          {
-            await Context.Bot.Client.DeleteMessageAsync(Context.Update.Message.Chat.Id, Context.Update.Message.MessageId - 1);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "нету пользователя", replyMarkup: userId.GenerateInlineButtons(descUserId));
-          }
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.Message.Chat.Id, Context.Update.Message.MessageId - 1);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "нету пользователя", replyMarkup: userId.GenerateInlineButtons(descUserId));
         }
-        else if (Context.Update.CallbackQuery is not null)
+        else if (Context.Update.CallbackQuery is not null && Context.Update.CallbackQuery.Message is not null)
         {
-          if (Context.Update.CallbackQuery.Message is not null)
-          {
-            await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "нету пользователя", replyMarkup: userId.GenerateInlineButtons(descUserId));
-          }
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "нету пользователя", replyMarkup: userId.GenerateInlineButtons(descUserId));
         }
         return;
       }
@@ -136,21 +119,15 @@ namespace TelegramBots_V4.Commands.User
       if (allUserId != null)
       {
         userId = allUserId.Split("\n").ToList();
-        if (Context.Update.Message is not null)
+        if (Context.Update.Message is not null && Context.Update.Message.Chat is not null)
         {
-          if (Context.Update.Message.Chat is not null)
-          {
-            await Context.Bot.Client.DeleteMessageAsync(Context.Update.Message.Chat.Id, Context.Update.Message.MessageId - 1);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "список", replyMarkup: userId.GenerateInlineButtons(descUserId, isRegex: true, del: true));
-          }
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.Message.Chat.Id, Context.Update.Message.MessageId - 1);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, "список", replyMarkup: userId.GenerateInlineButtons(descUserId, isRegex: true, del: true));
         }
-        else if (Context.Update.CallbackQuery is not null)
+        else if (Context.Update.CallbackQuery is not null && Context.Update.CallbackQuery.Message is not null)
         {
-          if (Context.Update.CallbackQuery.Message is not null)
-          {
-            await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
-            await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "список", replyMarkup: userId.GenerateInlineButtons(descUserId, isRegex: true, del: true));
-          }
+          await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+          await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, "список", replyMarkup: userId.GenerateInlineButtons(descUserId, isRegex: true, del: true));
         }
       }
     }
@@ -360,90 +337,108 @@ namespace TelegramBots_V4.Commands.User
     [Action("userIdIndex=98_delete=True_")]
     [Action("userIdIndex=99_delete=True_")]
     [Action("userIdIndex=100_delete=True_")]
-
     public async Task GetUserBtn()
     {
       string filePath = await Context.Update.HashNames(deserialize.FileStoragePath!, docFilePath, "data.txt");
       List<string> userIdList = new List<string>();
       string? allUserId = null;
-      string? userId = null;
-      if (Context.Update.CallbackQuery is not null)
+      string? user = null;
+      Games.Users.Connection.User _user = new Games.Users.Connection.User();
+
+      if (Context.Update.CallbackQuery is not null && Context.Update.CallbackQuery.Message is not null)
       {
-        if (Context.Update.CallbackQuery.Message is not null)
+        await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
+        await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
+
+        using (FileStream fs = new FileStream(filePath, FileMode.Open))
         {
-          await Context.Bot.Client.DeleteMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, Context.Update.CallbackQuery.Message.MessageId);
-          await Context.Bot.Client.AnswerCallbackQueryAsync(Context.Update.CallbackQuery.Id);
-
-          using (FileStream fs = new FileStream(filePath, FileMode.Open))
+          using (StreamReader sr = new StreamReader(fs))
           {
-            using (StreamReader sr = new StreamReader(fs))
-            {
-              allUserId = await sr.ReadToEndAsync();
-              sr.Dispose();
-            }
-            await fs.DisposeAsync();
+            allUserId = await sr.ReadToEndAsync();
+            sr.Dispose();
           }
-          if (allUserId != null)
+          await fs.DisposeAsync();
+        }
+        if (allUserId != null)
+        {
+          userIdList = allUserId.Split("\n").ToList();
+
+          string? patternCallData = Context.Update.CallbackQuery.Data;
+          int indexCallData = -1;
+          bool isDel = false;
+
+          if (patternCallData != null)
           {
-            userIdList = allUserId.Split("\n").ToList();
+            Match matchCallData = Regex.Match(patternCallData, "userIdIndex=(.*?)_delete=(.*?)_");
+            indexCallData = Convert.ToInt32(matchCallData.Groups[1].Value);
+            isDel = Convert.ToBoolean(matchCallData.Groups[2].Value);
+            user = userIdList[indexCallData];
 
-            string? patternCallData = Context.Update.CallbackQuery.Data;
-            int indexCallData = -1;
-            bool isDel = false;
-
-            if (patternCallData != null)
+            if (isDel)
             {
-              Match matchCallData = Regex.Match(patternCallData, "userIdIndex=(.*?)_delete=(.*?)_");
-              indexCallData = Convert.ToInt32(matchCallData.Groups[1].Value);
-              isDel = Convert.ToBoolean(matchCallData.Groups[2].Value);
+              string writeSW = OneDelUserList(user, ref userIdList);
+              using (StreamWriter sw = new StreamWriter(filePath))
+              {
+                await sw.WriteLineAsync(writeSW);
+                await sw.DisposeAsync();
+              }
+              if (Context.Update.CallbackQuery is not null)
+              {
+                if (Context.Update.CallbackQuery.Message is not null)
+                {
+                  await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, $"удален пользователь");
+                  await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, $"все команды", replyMarkup: FormInlineCommands.AllCommands());
+                }
+              }
+              else if (Context.Update.Message is not null)
+              {
+                if (Context.Update.Message.Chat is not null)
+                {
+                  await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, $"удален пользователь");
+                  await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, $"все команды", replyMarkup: FormInlineCommands.AllCommands());
+                }
+              }
+            }
+            else
+            {
+              Match matchUserList = Regex.Match(user, "id=<(.*?)>name=<(.*?)>");
+              _user.UserId = Convert.ToString(matchUserList.Groups[1])!;
+              _user.UserName = Convert.ToString(matchUserList.Groups[2])!;
+              _user.UserConnection();
 
-              if (isDel)
-              {
-                userId = userIdList[indexCallData];
-                using (FileStream fs = new FileStream(filePath, FileMode.Open))
-                {
-                  using (StreamWriter sw = new StreamWriter(fs))
-                  {
-                    string result = "";
-                    foreach (var item in userIdList)
-                    {
-                      if (item == userId)
-                        continue;
-                      else if (item != userId && item != "")
-                      {
-                        result += item + "\n";
-                      }
-                    }
-                    await sw.WriteLineAsync(result);
-                    await sw.DisposeAsync();
-                  }
-                  await fs.DisposeAsync();
-                }
-                if (Context.Update.CallbackQuery is not null)
-                {
-                  if (Context.Update.CallbackQuery.Message is not null)
-                  {
-                    await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, $"удален пользователь");
-                    await Context.Bot.Client.SendTextMessageAsync(Context.Update.CallbackQuery.Message.Chat.Id, $"все команды", replyMarkup: FormInlineCommands.AllCommands());
-                  }
-                }
-                else if (Context.Update.Message is not null)
-                {
-                  if (Context.Update.Message.Chat is not null)
-                  {
-                    await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, $"удален пользователь");
-                    await Context.Bot.Client.SendTextMessageAsync(Context.Update.Message.Chat.Id, $"все команды", replyMarkup: FormInlineCommands.AllCommands());
-                  }
-                }
-              }
-              else
-              {
-                //нужно подключится
-              }
             }
           }
         }
       }
+    }
+
+    private string OneDelUserList(string user, ref List<string> userList)
+    {
+      string? result = null;
+      bool one = true;
+      foreach (var item in userList)
+      {
+        if (item != "\r" && item != "")
+        {
+          if (one == true)
+          {
+            if (item != user)
+            {
+              result += item + "\n";
+            }
+            if (item == user)
+            {
+              one = false;
+              continue;
+            }
+          }
+          if (one == false)
+          {
+            result += item + "\n";
+          }
+        }
+      }
+      return result!;
     }
   }
 }
